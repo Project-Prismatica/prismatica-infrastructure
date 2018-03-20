@@ -4,6 +4,10 @@ volumes:
   core-mongo-storage: {}
   core-mongo-config: {}
 
+  vault-config: {}
+  vault-logs: {}
+  vault-file: {}
+
 services:
 
   core-mongo:
@@ -13,3 +17,14 @@ services:
     volumes:
     - "core-mongo-storage:/data/db:Z"
     - "core-mongo-config:/data/configdb:Z"
+
+  vault:
+    image: vault
+    env_from:
+    - "vault/environment"
+    expose:
+    - "8200"
+    volumes:
+    - "vault-config:/vault/config:Z"
+    - "vault-logs:/vault/logs:Z"
+    - "vault-file:/vault/file:Z"
