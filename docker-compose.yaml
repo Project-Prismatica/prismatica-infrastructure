@@ -1,0 +1,15 @@
+version: "3"
+
+volumes:
+  core-mongo-storage: {}
+  core-mongo-config: {}
+
+services:
+
+  core-mongo:
+    image: mongo
+    expose:
+    - "2379"
+    volumes:
+    - "core-mongo-storage:/data/db:Z"
+    - "core-mongo-config:/data/configdb:Z"
