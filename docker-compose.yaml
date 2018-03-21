@@ -15,9 +15,7 @@ volumes:
 services:
 
   prismatica-infrastructure:
-    image: prismatica-infrastructure:local
-    build:
-      context: .
+    image: quay.io/project-prismatica/prismatica-infrastructure:latest
     command:
     - "/bin/sh"
     - "-c"
