@@ -1,6 +1,10 @@
 version: "3"
 
 volumes:
+  prismatica-core-configs: {}
+
+  ambassador-config: {}
+
   core-mongo-storage: {}
   core-mongo-config: {}
 
@@ -9,6 +13,41 @@ volumes:
   vault-file: {}
 
 services:
+
+  prismatica-infrastructure:
+    image: prismatica-infrastructure:local
+    build:
+      context: .
+    command:
+    - "/bin/sh"
+    - "-c"
+    - >
+      cp -r /prismatica-infrastructure/ambassador/* \
+        /prismatica-core-configs/ambassador/config/ &&
+      date > /prismatica-core-configs/copied-timestamp
+    volumes:
+    - "prismatica-core-configs:/prismatica-core-configs:Z"
+
+  prismatica-core:
+    image: quay.io/project-prismatica/prismatica-core:latest
+    depends_on:
+      - prismatica-infrastructure
+    environment:
+      CORE_AMBASSADOR_SOURCE_CONFIG_DIR: "/source-configs/ambassador/config"
+      CORE_AMBASSADOR_CONFIG_DIR: "/external-configs/ambassador/"
+    expose:
+    - 8080
+    volumes:
+    - "ambassador-config:/external-configs/ambassador/config:Z"
+    - "prismatica-core-configs:/source-configs:Z"
+
+  ambassador:
+    image: quay.io/datawire/ambassador:0.29.0
+    ports:
+    - "8080:80"
+    - "8443:443"
+    volumes:
+    - "ambassador-config:/etc/ambassador-config:Z"
 
   core-mongo:
     image: mongo
@@ -20,7 +59,7 @@ services:
 
   vault:
     image: vault
-    env_from:
+    env_file:
     - "vault/environment"
     expose:
     - "8200"

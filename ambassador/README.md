@@ -1,0 +1,1 @@
+# ambassador configuration to route to services goes here
