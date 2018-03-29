@@ -20,6 +20,7 @@ services:
     - "/bin/sh"
     - "-c"
     - >
+      mkdir -p /prismatica-core-configs/ambassador/config &&
       cp -r /prismatica-infrastructure/ambassador/* \
         /prismatica-core-configs/ambassador/config/ &&
       date > /prismatica-core-configs/copied-timestamp
@@ -39,11 +40,21 @@ services:
     - "ambassador-config:/external-configs/ambassador/config:Z"
     - "prismatica-core-configs:/source-configs:Z"
 
+  prismatica-idam:
+    image: quay.io/project-prismatica/prismatica-idam:latest
+    depends_on:
+      - prismatica-infrastructure
+    environment:
+      IDAM_BIND: "0.0.0.0:8080"
+      IDAM_DEBUG: "1"
+    expose:
+    - 8080
+
   ambassador:
     image: quay.io/datawire/ambassador:0.29.0
     ports:
-    - "8080:80"
-    - "8443:443"
+    - "80:80"
+    - "443:443"
     volumes:
     - "ambassador-config:/etc/ambassador-config:Z"
 
