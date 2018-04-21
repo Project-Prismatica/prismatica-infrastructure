@@ -1,0 +1,10 @@
+#
+# Route for Prismatica RootUI
+#
+---
+apiVersion: ambassador/v0
+kind: Mapping
+name: Prismatica-RootUI
+prefix: /
+service: http://prismatica-rootui:3000/
+use_websocket: true

@@ -1,9 +1,0 @@
-#
-# Fallback route for anything coming into Amabassador
-#
----
-apiVersion: ambassador/v0
-kind: Mapping
-name: catch-all
-prefix: /website
-service: http://prismatica.io
