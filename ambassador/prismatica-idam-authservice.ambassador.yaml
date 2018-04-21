@@ -1,12 +1,12 @@
 #
 # Configuration for Ambassador to use the prismatica IdAM service
 #
----
-apiVersion: ambassador/v0
-kind:  AuthService
-name:  authentication
-auth_service: "prismatica-idam:8080"
-path_prefix: "/ambassador/extauth"
-allowed_headers:
-- "x-prismatica-session"
-- "X-Prismatica-Session"
+#---
+#apiVersion: ambassador/v0
+#kind:  AuthService
+#name:  authentication
+#auth_service: "prismatica-idam:8080"
+#path_prefix: "/ambassador/extauth"
+#allowed_headers:
+#- "x-prismatica-session"
+#- "X-Prismatica-Session"

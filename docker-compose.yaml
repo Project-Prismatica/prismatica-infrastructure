@@ -34,6 +34,7 @@ services:
     environment:
       CORE_AMBASSADOR_SOURCE_CONFIG_DIR: "/source-configs/ambassador/config"
       CORE_AMBASSADOR_CONFIG_DIR: "/external-configs/ambassador/"
+      DEBUG: 1
     expose:
     - 8080
     volumes:
@@ -50,6 +51,19 @@ services:
     expose:
     - 8080
 
+  prismatica-rootui:
+    image: quay.io/project-prismatica/prismatica-rootui:latest
+    depends_on:
+      - prismatica-infrastructure
+    environment:
+      ROOT_URL: "http://prismatica-rootui/"
+      MONGO_URL: "mongodb://core-mongo:27017/rootui"
+      WAIT_FOR: "core-mongo:27017"
+      WAIT_FOR_FAIL: "true"
+      WAIT_FOR_SECONDS: 30
+    expose:
+    - 3000
+
   ambassador:
     image: quay.io/datawire/ambassador:0.29.0
     ports:
@@ -61,7 +75,7 @@ services:
   core-mongo:
     image: mongo
     expose:
-    - "2379"
+    - "27017"
     volumes:
     - "core-mongo-storage:/data/db:Z"
     - "core-mongo-config:/data/configdb:Z"
